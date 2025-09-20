@@ -398,7 +398,7 @@ function Body({sessionKey}) {
                   type="password" 
                   value={inputValue} 
                   onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
+                
                   onPaste={handlePaste} 
                   ref={inputRef} 
                   autoComplete='off'
