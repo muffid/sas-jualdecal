@@ -27,13 +27,13 @@ import FailSound from './../public/sound/fail.mp3'
   }
 
 
-function Body() {
+function Body({sessionKey}) {
     const navigate = useNavigate();
     const handleLogout = () => {
-      localStorage.removeItem("loginData");
-      navigate("/");
-    };
-
+    localStorage.removeItem(sessionKey);
+    alert(sessionKey)
+    navigate("/");
+  };
     const inputRef = useRef(null)
     const [inputValue, setInputValue] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)

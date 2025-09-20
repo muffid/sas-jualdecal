@@ -1,13 +1,19 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login({ setIsAuthenticated }) {
+export default function Login({ sessionKey, sessionDuration }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const inputRef = useRef(null);
 
   useEffect(() => {
-    // saat komponen tampil, langsung fokus ke input
+    const session = JSON.parse(localStorage.getItem(sessionKey));
+    if (session && new Date().getTime() < session.expiry) {
+      navigate("/home");
+    }
+  }, [navigate, sessionKey]);
+
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -16,44 +22,32 @@ function Login({ setIsAuthenticated }) {
   const handleLogin = (e) => {
     e.preventDefault();
     if (password === "5758") {
-      const loginData = {
-        timestamp: new Date().getTime(),
-      };
-      localStorage.setItem("loginData", JSON.stringify(loginData));
-
-      setIsAuthenticated(true);
-      navigate("/");
+      const expiry = new Date().getTime() + sessionDuration;
+      localStorage.setItem(sessionKey, JSON.stringify({ expiry }));
+      navigate("/home");
     } else {
-      alert("INVALID KEY PASS");
-
-      // kosongkan input
-      setPassword("");
-
-      // fokus ulang ke input
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
+      alert("Password salah!");
+      setPassword(""); // reset input
     }
   };
 
   return (
-    <div className=' flex flex-col items-center justify-center w-screen h-screen bg-[#191923] relative '>
-      <h1>INSERT KEY PASS TO PROCEED</h1>
-      <form onSubmit={handleLogin} className="flex flex-col items-center justify-center">
-
-      <input 
-         type="password"
-         ref={inputRef} // pasang ref untuk auto focus
-         value={password}
-         onChange={(e) => setPassword(e.target.value)}
-       
-        className='p-2 border-b border-slate-700   focus:outline-none bg-transparent text-slate-400 text-center' 
-      />
-     
-        <button type="submit"></button>
+   <div className=' flex flex-col items-center justify-center w-screen h-screen bg-[#191923] relative '>
+      <form onSubmit={handleLogin}>
+        <h2>Login</h2>
+        <input
+          className="p-2 border-b border-slate-700   focus:outline-none bg-transparent text-slate-400 text-center"
+          type="text"
+          ref={inputRef}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onBlur={() => inputRef.current && inputRef.current.focus()} // kunci fokus
+        />
+        <br />
+        <button type="submit" style={{ marginTop: "10px" }}>
+          Login
+        </button>
       </form>
     </div>
   );
 }
-
-export default Login;

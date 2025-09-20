@@ -1,45 +1,40 @@
-import { useState,useEffect } from 'react'
-import './App.css'
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Body from './Body'
-import Login from './Login'
+import Login from "./Login";
+import Home from "./Body";
 
+const SESSION_KEY = "session";
+const SESSION_DURATION = 20 * 60 * 60 * 1000; // 20 jam
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+// Cek apakah session valid
+const isSessionValid = () => {
+  const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+  if (!session) return false;
 
-  useEffect(() => {
-    // cek localStorage apakah ada login yang valid
-    const loginData = localStorage.getItem("loginData");
-    if (loginData) {
-      const { timestamp } = JSON.parse(loginData);
-      const now = new Date().getTime();
+  const now = new Date().getTime();
+  return now < session.expiry;
+};
 
-      // cek apakah masih dalam 24 jam (24 * 60 * 60 * 1000 ms)
-      if (now - timestamp < 24 * 60 * 60 * 1000) {
-        setIsAuthenticated(true);
-      } else {
-        localStorage.removeItem("loginData"); // expired
-      }
-    }
-  }, []);
+// Wrapper route yang butuh login
+function PrivateRoute({ children }) {
+  return isSessionValid() ? children : <Navigate to="/" />;
+}
 
+export default function App() {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? <Navigate to="/home" /> : <Login setIsAuthenticated={setIsAuthenticated} />
-          }
-        />
+        <Route path="/" element={<Login sessionKey={SESSION_KEY} sessionDuration={SESSION_DURATION} />} />
         <Route
           path="/home"
-          element={isAuthenticated ? <Body /> : <Navigate to="/" />}
+          element={
+            <PrivateRoute>
+              <Home sessionKey={SESSION_KEY} />
+            </PrivateRoute>
+          }
         />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
 }
-
-export default App
