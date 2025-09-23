@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import moment from 'moment'
 import axios from 'axios'
 
+
 import Logo from "./../public/img/robot.png"
 import Work from "./../public/img/briefcase.png"
 import Rest from "./../public/img/cold-coffee.png"
@@ -31,7 +32,7 @@ function Body({sessionKey}) {
     const navigate = useNavigate();
     const handleLogout = () => {
     localStorage.removeItem(sessionKey);
-    alert(sessionKey)
+    alert("LOGGED OUT")
     navigate("/");
   };
     const inputRef = useRef(null)
@@ -398,7 +399,7 @@ function Body({sessionKey}) {
                   type="password" 
                   value={inputValue} 
                   onChange={handleInputChange}
-                
+                  onKeyDown={handleKeyDown}
                   onPaste={handlePaste} 
                   ref={inputRef} 
                   autoComplete='off'
