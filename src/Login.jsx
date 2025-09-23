@@ -23,7 +23,6 @@ export default function Login({ sessionKey, sessionDuration }) {
   const handleLogin = (e) => { 
     e.preventDefault();
     const hashValue = SHA1(password).toString();
-    // alert(hashValue)
     if (hashValue === "c8208aa5a42e432425517bbf8599aab30c4b4d65") {
       const expiry = new Date().getTime() + sessionDuration;
       localStorage.setItem(sessionKey, JSON.stringify({ expiry }));

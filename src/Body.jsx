@@ -409,6 +409,10 @@ function Body({sessionKey}) {
         <div className=' absolute bottom-5 flex flex-row gap-x-1 items-start justify-start'>
             <img onClick={handleLogout} src={Logo} alt="Deskripsi Gambar" className='w-12 transform -rotate-12' />
             <p className='w-[200px] text-slate-500 text-xs'><span className='font-bold'>Hello, </span>Tugas anda adalah bekerja, masalah absen biar saya yang urus</p>
+           
+        </div>
+        <div className='absolute bottom-5 left-0 p-8'>
+          <p className='cursor-pointer hover:font-bold text-blue-400' onClick={handleLogout}>Lock this app</p>
         </div>
         
         {isModalOpen && (
