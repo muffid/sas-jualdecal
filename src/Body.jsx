@@ -399,9 +399,7 @@ function Body({sessionKey}) {
                   type="password" 
                   value={inputValue} 
                   onChange={handleInputChange}
-          
                   ref={inputRef} 
-                  autoComplete='off'
                   className='p-2 border-b border-slate-700   focus:outline-none bg-transparent text-slate-400 text-center' />
                 <p className='text-slate-500 text-xs'>Templek kan kartu anda di mesin RFID</p>
         </div>
